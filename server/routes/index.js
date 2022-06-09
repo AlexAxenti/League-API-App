@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/test', (req, res) => {
-    res.send("Hello word 2!!");
+    res.send("Hello word 3!!!");
 })
 
 
