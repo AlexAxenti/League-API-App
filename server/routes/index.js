@@ -6,6 +6,11 @@ router.get('/', (req, res) => {
     res.send("Hello word!");
 })
 
+router.get('/test', (req, res) => {
+    res.send("Hello word 2!!");
+})
+
+
 router.get('/user', (req, res) => {
     res.send({ user: 'Zethyos', rank: 'Challenger 2500LP' });
 })
