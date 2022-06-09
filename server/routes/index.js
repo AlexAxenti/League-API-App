@@ -10,5 +10,4 @@ router.get('/user', (req, res) => {
     res.send({ user: 'Zethyos', rank: 'Challenger 2500LP' });
 })
 
-
 module.exports = router;
