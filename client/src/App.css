@@ -40,3 +40,19 @@
 ul {
   list-style-type: none;
 }
+
+.search-screen {
+  margin-top: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.summoner-info {
+  margin-top: 1rem;
+}
+
+#search-header {
+  text-align: center;
+}

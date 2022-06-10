@@ -1,29 +1,37 @@
 import React, {useState, useEffect} from "react";
-import { BrowserRouter as Router, Route, Routes, Link } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-router-dom";
 import './App.css';
 
 export default function App() {
+  const [search, setSearch] = useState("");
   return (
     <Router>
       <div>
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
+        <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+          <a className="navbar-brand" href="/">Home</a>
+          <ul className="navbar-nav mr-auto">
+            <li className="nav-item">
+              <a className="nav-link" href="/summoners">Summoners <span className="sr-only">(current)</span></a>
             </li>
-            <li>
-              <Link to="/about">About</Link>
-            </li>
-            <li>
-              <Link to="/summoners">Summoners</Link>
+            <li className="nav-item">
+              <a className="nav-link" href="/about">About</a>
             </li>
           </ul>
+          <form className="form-inline my-2 my-lg-0">
+            <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" onChange={e => setSearch(e.target.value)}/>
+            <Link to={{ pathname: `/summoners/${search}` }}>
+              <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </Link>
+          </form>
         </nav>
 
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/about" element={<About />}></Route>
-          <Route path="/summoners" element={<Summoners />}></Route>
+          <Route path="/summoners">
+            <Route index element={<Summoners />}></Route>
+            <Route path=":summonerName" element={<Summoners />}></Route>
+          </Route>
         </Routes>
       </div>
     </Router>
@@ -40,18 +48,33 @@ function Home() {
 
 function Summoners() {
   const [summoner, setSummoner] = useState({user: '', rank: ''});
+  const [search, setSearch] = useState("");
+  const { summonerName } = useParams();
 
   useEffect(() => {
-    fetch("/api/user")
-    .then(res => res.json())
-    .then(data => setSummoner(data));
-  }, []);
+    if (typeof summonerName != "undefined") {
+      fetch(`/api/user?username=${summonerName}`)
+      .then(res => res.json())
+      .then(data => setSummoner(data));
+    }
+  }, [summonerName]);
 
   return (
-    <div>
-      <h1>Summoners</h1>
-      <p>{summoner.user}</p>
-      <p>{summoner.rank}</p>
+    <div className="search-screen">
+      <div>
+        <h1 id="search-header">Search Summoner</h1>
+        <form className="form-inline my-2 my-lg-0">
+          <label>Summoner Name: </label>
+          <input className="form-control mr-sm-2" type="text" name="name" placeholder="Search User" onChange={e => setSearch(e.target.value)}/>
+          <Link to={{pathname: `/summoners/${search}`}}>
+            <button className="btn btn-outline-success my-2 my-sm-0">Submit</button>
+          </Link>
+        </form>
+        <div className="summoner-info">
+          <p>{summoner.user}</p>
+          <p>{summoner.rank}</p>
+        </div>
+      </div>
     </div>
   )
 }
@@ -63,46 +86,3 @@ function About() {
     </div>
   )
 }
-
-// class App extends Component {
-//   constructor(props) {
-//     super(props);
-//     this.state = { apiResponse: "" };
-//   }
-
-//   callAPI() {
-//     fetch("/api/user")
-//       .then(res => res.text())
-//       .then(res => this.setState({ apiResponse: res }));
-//   }
-
-//   componentDidMount() {
-//     this.callAPI();
-//   }
-
-//   render() {
-//     return (
-//       <Router>
-//         <div className="App">
-//           <header className="App-header">
-//             <nav>
-//               <ul>
-//                 <li><a href="/">Home</a></li>
-//                 <li><a href="/summoners">Summoners</a></li>
-//                 <li><a href="/info">Info</a></li>
-//               </ul>
-//             </nav>
-//             <img src={logo} className="App-logo" alt="logo" />
-//             <h1 className="App-title">Welcome to React</h1>
-//             <p className="App-intro">
-//               {this.state.apiResponse}
-//             </p>
-//             <Route path="/" component={Home} />
-//           </header>
-//         </div>
-//       </Router>
-//     );
-//   }
-// }
-
-// export default App;
