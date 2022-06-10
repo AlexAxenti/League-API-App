@@ -62,7 +62,7 @@ function Summoners() {
   return (
     <div className="search-screen">
       <div>
-        <h1 id="search-header">Search Summoners</h1>
+        <h1 id="search-header">Search Summoner</h1>
         <form className="form-inline my-2 my-lg-0">
           <label>Summoner Name: </label>
           <input className="form-control mr-sm-2" type="text" name="name" placeholder="Search User" onChange={e => setSearch(e.target.value)}/>
