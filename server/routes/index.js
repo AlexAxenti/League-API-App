@@ -7,7 +7,7 @@ router.get('/', (req, res) => {
 })
 
 router.get('/user', (req, res) => {
-    res.send({ user: 'Zethyos', rank: 'Challenger 2501LP' });
+    res.send({ user: 'Zethyos', rank: 'Challenger 2500LP' });
 })
 
 module.exports = router;
