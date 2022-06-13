@@ -30,6 +30,7 @@ router.get('/user/:username', (req, res) => {
         if (!err) {
             console.log(users);
             if (!users) {
+                // Query from riot
                 res.send({});
             } else {
                 res.send(users);
