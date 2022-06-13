@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const axios = require('axios').default;
 var User = require('../models/users');
 
 /* GET home page. */
