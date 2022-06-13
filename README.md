@@ -8,4 +8,4 @@
 ## Client Start Up:
 
 1. (ONLY ON FIRST SET UP) cd into League-API-App/client and execute `npm i`
-2. To start client execute `npm run start` 
+2. To start client execute `npm start` 
