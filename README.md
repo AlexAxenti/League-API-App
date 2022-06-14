@@ -3,7 +3,7 @@
 ## Server Start Up:
 
 1. (ONLY AFTER RECENT PULL) execute `npm i`
-2. To start server execute `npm start`. 
+2. To start server execute `npm start` OR type `nodemon server.js` for automatic server restarting on file save. 
 
 ## Client Start Up:
 
