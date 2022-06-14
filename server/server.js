@@ -5,7 +5,7 @@ require('dotenv').config();
 const app = express()
 const port = 7000
 
-var indexRouter = require('./routes/index');
+var userRouter = require('./routes/user');
 
 console.log(process.env.MONGO_DB_CONNECTION);
 mongoose.connect(process.env.MONGO_DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
@@ -13,7 +13,7 @@ mongoose.connect(process.env.MONGO_DB_CONNECTION, { useNewUrlParser: true, useUn
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 
 //app.use(cors());
-app.use('/api', indexRouter);
+app.use('/api/user', userRouter);
 
 app.get('*', (req, res) => {
     res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'))
