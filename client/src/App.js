@@ -75,13 +75,12 @@ function Summoners() {
           </Link>
         </form>
         <div className="summoner-info">
-          <p>{summoner.summonerName}</p>
-          <p>{summoner.summonerLevel}</p>
-          <p>{summoner.tier}</p>
-          <p>{summoner.rank}</p>
-          <p>{summoner.leaguePoints}</p>
-          <p>{summoner.wins}</p>
-          <p>{summoner.losses}</p>
+          <p>Summoner: {summoner.summonerName}</p>
+          <p>Level: {summoner.summonerLevel}</p>
+          <p>Rank: {summoner.tier} {summoner.rank}</p>
+          <p>LP: {summoner.leaguePoints}</p>
+          <p>Wins: {summoner.wins}</p>
+          <p>Losses: {summoner.losses}</p>
         </div>
       </div>
     </div>
