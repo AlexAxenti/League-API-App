@@ -5,6 +5,7 @@ var userSchema = new mongoose.Schema({
     summonerID: String,
     puuid: String,
     summonerLevel: Number,
+    tier: String,
     rank: String,
     leaguePoints: Number,
     wins: Number,
