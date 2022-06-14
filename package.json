@@ -2,7 +2,7 @@
   "name": "league-api-app",
   "version": "1.0.0",
   "description": "",
-  "main": "user.js",
+  "main": "index.js",
   "scripts": {
     "start": "node server/server.js",
     "build": "cd client && npm install && npm run build"
@@ -18,11 +18,8 @@
   },
   "homepage": "https://github.com/AlexAxenti/League-API-App#readme",
   "dependencies": {
-    "axios": "^0.27.2",
     "cors": "^2.8.5",
     "dotenv": "^16.0.1",
-    "express": "^4.18.1",
-    "mongoose": "^6.3.6",
-    "nodemon": "^2.0.16"
+    "express": "^4.18.1"
   }
 }
