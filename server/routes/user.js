@@ -6,7 +6,7 @@ var User = require('../models/users');
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    res.send("Hello word!");
+    res.send({message: "Hello Word"});
 })
 
 router.get('/:username', (req, res) => {
