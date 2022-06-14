@@ -48,7 +48,7 @@ function Home() {
 }
 
 function Summoners() {
-  const [summoner, setSummoner] = useState({summonerName: '', rank: ''});
+  const [summoner, setSummoner] = useState({});
   const [search, setSearch] = useState("");
   const { summonerName } = useParams();
 
@@ -76,7 +76,12 @@ function Summoners() {
         </form>
         <div className="summoner-info">
           <p>{summoner.summonerName}</p>
+          <p>{summoner.summonerLevel}</p>
+          <p>{summoner.tier}</p>
           <p>{summoner.rank}</p>
+          <p>{summoner.leaguePoints}</p>
+          <p>{summoner.wins}</p>
+          <p>{summoner.losses}</p>
         </div>
       </div>
     </div>
