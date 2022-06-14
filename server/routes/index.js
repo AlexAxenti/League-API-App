@@ -50,7 +50,7 @@ router.get('/user/:username', (req, res) => {
                                     user.save(function (err) {
                                         if (err) console.log(err);
                                     });
-                                    
+                                    res.send(user);
                                     break;
                                 }
                             }                            
@@ -60,13 +60,9 @@ router.get('/user/:username', (req, res) => {
                         });
 
                     })
-
                     .catch(function (error){
                         console.log("first error: " + error);
                     });
-
-                
-                res.send({});
             } else {
                 res.send(users);
             }
