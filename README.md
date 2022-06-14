@@ -2,10 +2,11 @@
 
 ## Server Start Up:
 
-1. (ONLY ON FIRST SET UP) cd into League-API-App/server and execute `npm i`
-2. To start server execute `node server.js`. For instant refresh of the server while editing (upon each save) execute `nodemon server.js` instead. 
+1. (ONLY AFTER RECENT PULL) execute `npm i`
+2. To start server execute `npm start`. 
 
 ## Client Start Up:
 
-1. (ONLY ON FIRST SET UP) cd into League-API-App/client and execute `npm i`
-2. To start client execute `npm start` 
+1. cd into League-API-App/client 
+2. (ONLY AFTER RECENT PULL) execute `npm i`
+3. To start client execute `npm start` 
