@@ -9,7 +9,7 @@ router.get('/', (req, res) => {
     res.send("Hello word!");
 })
 
-router.get('/user/:username', (req, res) => {
+router.get('/:username', (req, res) => {
     let username = req.params.username;
 
     var query = User.findOne({summonerName: username}).select('-_id');
