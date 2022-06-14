@@ -55,7 +55,10 @@ function Summoners() {
     if (typeof summonerName != "undefined") {
       fetch(`/api/user?username=${summonerName}`)
       .then(res => res.json())
-      .then(data => setSummoner(data));
+      .then(data => {
+        console.log(data);
+        setSummoner(data)
+      });
     }
   }, [summonerName]);
 
