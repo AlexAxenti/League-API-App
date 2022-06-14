@@ -4,6 +4,7 @@ import './App.css';
 
 export default function App() {
   const [search, setSearch] = useState("");
+
   return (
     <Router>
       <div>
@@ -47,15 +48,18 @@ function Home() {
 }
 
 function Summoners() {
-  const [summoner, setSummoner] = useState({user: '', rank: ''});
+  const [summoner, setSummoner] = useState({});
   const [search, setSearch] = useState("");
   const { summonerName } = useParams();
 
   useEffect(() => {
     if (typeof summonerName != "undefined") {
-      fetch(`/api/user?username=${summonerName}`)
+      fetch(`/api/user/${summonerName}`)
       .then(res => res.json())
-      .then(data => setSummoner(data));
+      .then(data => {
+        setSummoner(data);
+        console.log(data);
+      });
     }
   }, [summonerName]);
 
@@ -71,8 +75,13 @@ function Summoners() {
           </Link>
         </form>
         <div className="summoner-info">
-          <p>{summoner.user}</p>
+          <p>{summoner.summonerName}</p>
+          <p>{summoner.summonerLevel}</p>
+          <p>{summoner.tier}</p>
           <p>{summoner.rank}</p>
+          <p>{summoner.leaguePoints}</p>
+          <p>{summoner.wins}</p>
+          <p>{summoner.losses}</p>
         </div>
       </div>
     </div>

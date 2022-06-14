@@ -1,10 +1,13 @@
 const express = require('express')
 const path = require('path');
+const mongoose = require('mongoose')
+require('dotenv').config();
 const app = express()
 const port = 7000
 
 var indexRouter = require('./routes/index');
-var cors = require("cors");
+
+mongoose.connect(process.env.MONGO_DB_CONNECTION, { useNewUrlParser: true, useUnifiedTopology: true });
 
 app.use(express.static(path.resolve(__dirname, '../client/build')));
 

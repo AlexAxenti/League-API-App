@@ -3,7 +3,7 @@
 ## Server Start Up:
 
 1. (ONLY AFTER RECENT PULL) execute `npm i`
-3. To start server execute `npm start`. 
+2. To start server execute `npm start`. 
 
 ## Client Start Up:
 
