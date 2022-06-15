@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-router-dom";
+import axios from 'axios';
 import './App.css';
 
 export default function App() {
@@ -64,12 +65,33 @@ function Summoners() {
   }, [summonerName]);
 
   function updateUser() {
-    fetch(`/api/user/update/${summoner.summonerID}`)
-      .then(res => res.json())
-      .then(data => {
-        setSummoner(data);
+    axios.get(`/api/user/update/${summoner.summonerID}`)
+      .then(res => {
+        console.log(res)
+        if (res.status == 200) {
+          setSummoner(res.data);
+        }
+      })
+      .catch(err => {
+        let res = err.response;
+        if (res.status == 429) {
+          console.log(res.data);
+        } else if (res.status == 404) {
+          console.log(res.data);
+        } else {
+          console.log(err)
+        }
       })
   }
+
+
+  // function updateUser() {
+  //   fetch(`/api/user/update/${summoner.summonerID}`)
+  //     .then(res => res.json())
+  //     .then(data => {
+  //       setSummoner(data);
+  //     })
+  // }
 
   // updateUser(() => {
   //   fetch(`/api/user/update/${summoner.summonerID}`)
