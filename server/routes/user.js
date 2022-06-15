@@ -15,66 +15,70 @@ function getDifferenceInSeconds(date1, date2) {
     return diffInMs / 1000;
 }
 
-router.get('/update/:summonerID', (req, res) => {
-    let summonerID = req.params.summonerID;
+router.get('/update/:summonerName', (req, res) => {
+    let summonerName = req.params.summonerName;
     let timestamp = new Date();
 
-    var query = User.findOne({ summonerID: summonerID });
-    query.exec(function (err, users) {
+    var query = User.findOne({ summonerName: summonerName });
+    query.exec(function (err, user) {
         if (!err) {
-            if (!users) {
+            if (!user) {
                 res.status(404);
                 res.send({error: "No user found"})
             } else {
-                let timeSinceUpdate = getDifferenceInSeconds(timestamp, users.updatedAt)
+                let timeSinceUpdate = getDifferenceInSeconds(timestamp, user.updatedAt)
                 if (timeSinceUpdate < 90) {
                     res.status(429);
                     res.send({error: "Updated too recently", timeSinceUpdate: timeSinceUpdate})
                 } else {
-                    axios.get(`https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerID}?api_key=` + process.env.RIOT_API_KEY)
-                        .then(function (response) {
-                            // console.log(response.data);
+                    const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(summonerName);
+                    getSummonerDataIDs.then((responseIDs) => {
+                        const summonerDataIDs = responseIDs;
 
-                            for (let i = 0; i < response.data.length; i++) {
-                                if (response.data[i].queueType == "RANKED_SOLO_5x5") {
-                                    users.tier = response.data[i].tier;
-                                    users.rank = response.data[i].rank;
-                                    users.leaguePoints = response.data[i].leaguePoints;
-                                    users.wins = response.data[i].wins;
-                                    users.losses = response.data[i].losses;
-                                    users.updatedAt = timestamp;
-                                    // console.log(users);
-                                    console.log("updating")
-                                    users.save(function (err) {
-                                        if (err) console.log(err);
-                                    });
-                                    res.status(200);
-                                    console.log(users);
-                                    res.send(users);
-                                    break;
+                        const getSummonerDataRankedSoloDuo = axiosFunctions.getSummonerDataRankedSoloDuo(summonerDataIDs.summonerID);
+
+                        getSummonerDataRankedSoloDuo.then((responseRankedSoloDuo) => {
+                            const summonerDataRankedSoloDuo = responseRankedSoloDuo;
+
+                            //merge both JSON responses for the current summoner into one summoner object
+                            let key;
+                            let objectID = user._id;
+
+                            for (key in summonerDataIDs) {
+                                if (summonerDataIDs._doc.hasOwnProperty(key)) {
+                                    user[key] = summonerDataIDs._doc[key];
                                 }
                             }
-                        })
-                        .catch(function (error) {
-                            console.log("second error: " + error);
-                            res.status(500);
-                            res.send({ error: "error occured" })
+
+                            for (key in summonerDataRankedSoloDuo) {
+                                if (summonerDataRankedSoloDuo._doc.hasOwnProperty(key)) {
+                                    user[key] = summonerDataRankedSoloDuo._doc[key];
+                                }
+                            }
+                            
+                            user._id = objectID;
+                            user.save(function (err) {
+                                if (err) console.log(err);
+                            });
+
+                            res.send(user);
                         });
+                    });
                 }
             }
         }
     })
 });
 
-router.get('/:username', (req, res) => {
-    let username = req.params.username;
+router.get('/:summonerName', (req, res) => {
+    let summonerName = req.params.summonerName;
 
-    var query = User.findOne({ summonerName: username }).select('-_id');
-    query.exec(function (err, users) {
+    var query = User.findOne({ summonerName: summonerName }).select('-_id');
+    query.exec(function (err, user) {
         if (!err) {
-            if (!users) {
+            if (!user) {
                 // Query from riot
-                const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(username);
+                const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(summonerName);
                 getSummonerDataIDs.then((responseIDs) => {
                     const summonerDataIDs = responseIDs;
                     const getSummonerDataRankedSoloDuo = axiosFunctions.getSummonerDataRankedSoloDuo(summonerDataIDs.summonerID);
@@ -107,7 +111,7 @@ router.get('/:username', (req, res) => {
                 });
                 
             } else {
-                res.send(users);
+                res.send(user);
             }
         } else {
             console.log(err)
