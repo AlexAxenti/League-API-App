@@ -63,6 +63,22 @@ function Summoners() {
     }
   }, [summonerName]);
 
+  function updateUser() {
+    fetch(`/api/user/update/${summoner.summonerID}`)
+      .then(res => res.json())
+      .then(data => {
+        setSummoner(data);
+      })
+  }
+
+  // updateUser(() => {
+  //   fetch(`/api/user/update/${summoner.summonerID}`)
+  //   .then(res => res.json())
+  //   .then(data => {
+  //     setSummoner(data);
+  //   })
+  // })
+
   return (
     <div className="search-screen">
       <div>
@@ -75,6 +91,7 @@ function Summoners() {
           </Link>
         </form>
         <div className="summoner-info">
+          <button onClick={updateUser} className="btn btn-outline-success my-2 my-sm-0">Update</button>
           <p>Summoner: {summoner.summonerName}</p>
           <p>Level: {summoner.summonerLevel}</p>
           <p>Rank: {summoner.tier} {summoner.rank}</p>
