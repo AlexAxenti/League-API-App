@@ -19,7 +19,7 @@ router.get('/update/:summonerName', (req, res) => {
     let summonerName = req.params.summonerName;
     let timestamp = new Date();
 
-    var query = User.findOne({ summonerName: summonerName });
+    var query = User.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') });
     query.exec(function (err, user) {
         if (!err) {
             if (!user) {
@@ -73,7 +73,7 @@ router.get('/update/:summonerName', (req, res) => {
 router.get('/:summonerName', (req, res) => {
     let summonerName = req.params.summonerName;
 
-    var query = User.findOne({ summonerName: summonerName }).select('-_id');
+    var query = User.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') }).select('-_id');
     query.exec(function (err, user) {
         if (!err) {
             if (!user) {
