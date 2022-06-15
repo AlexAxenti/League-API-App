@@ -1,3 +1,4 @@
+const { default: axios } = require('axios');
 const express = require('express');
 const router = express.Router();
 
@@ -15,11 +16,40 @@ router.get('/:username', (req, res) => {
     var query = User.findOne({summonerName: username}).select('-_id');
     query.exec(function (err, users) {
         if (!err) {
-            console.log(users);
             if (!users) {
                 // Query from riot
-                let summonerDataIDs = axiosFunctions.getSummonerDataIDs(username);
-                //let summonerDataRankedSoloDuo = axiosFunctions.getSummonerDataRankedSoloDuo(res, summonerDataIDs.id);
+                const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(username);
+                getSummonerDataIDs.then((responseIDs) => {
+                    const summonerDataIDs = responseIDs;
+                    const getSummonerDataRankedSoloDuo = axiosFunctions.getSummonerDataRankedSoloDuo(summonerDataIDs.summonerID);
+
+                    getSummonerDataRankedSoloDuo.then((responseRankedSoloDuo) => {
+                        const summonerDataRankedSoloDuo = responseRankedSoloDuo;
+
+                        //merge both JSON responses for the current summoner into one summoner object
+                        let summoner = new User;
+                        let key;
+
+                        for (key in summonerDataIDs) {
+                            if(summonerDataIDs._doc.hasOwnProperty(key)){
+                                summoner[key] = summonerDataIDs._doc[key];
+                            }
+                        }
+
+                        for (key in summonerDataRankedSoloDuo) {
+                            if(summonerDataRankedSoloDuo._doc.hasOwnProperty(key)){
+                                summoner[key] = summonerDataRankedSoloDuo._doc[key];
+                            }
+                        }
+
+                        summoner.save(function (err) {
+                            if (err) console.log(err);
+                        });
+
+                        res.send(summoner);
+                    });
+                });
+                
             } else {
                 res.send(users);
             }
