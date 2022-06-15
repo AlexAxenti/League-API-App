@@ -10,6 +10,6 @@ var userSchema = new mongoose.Schema({
     leaguePoints: Number,
     wins: Number,
     losses: Number,
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("User", userSchema)
