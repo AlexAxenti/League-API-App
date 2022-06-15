@@ -1,12 +1,13 @@
+const { default: axios } = require('axios');
 const express = require('express');
 const router = express.Router();
-const axios = require('axios').default;
 
 var User = require('../models/users');
+const axiosFunctions = require('./axiosFunctions.js');
 
 /* GET home page. */
 router.get('/', (req, res) => {
-    res.send("Hello word!");
+    res.send("Hello world!");
 })
 
 function getDifferenceInSeconds(date1, date2) {
@@ -73,48 +74,38 @@ router.get('/:username', (req, res) => {
         if (!err) {
             if (!users) {
                 // Query from riot
-                let summonerID = null;
-                let puuid = null;
-                let level = 0;
+                const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(username);
+                getSummonerDataIDs.then((responseIDs) => {
+                    const summonerDataIDs = responseIDs;
+                    const getSummonerDataRankedSoloDuo = axiosFunctions.getSummonerDataRankedSoloDuo(summonerDataIDs.summonerID);
 
-                axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}?api_key=` + process.env.RIOT_API_KEY)
-                    .then(function (response) {
-                        summonerID = response.data.id;
-                        puuid = response.data.puuid;
-                        level = response.data.summonerLevel;
+                    getSummonerDataRankedSoloDuo.then((responseRankedSoloDuo) => {
+                        const summonerDataRankedSoloDuo = responseRankedSoloDuo;
 
-                        axios.get(`https://na1.api.riotgames.com/lol/league/v4/entries/by-summoner/${summonerID}?api_key=` + process.env.RIOT_API_KEY)
-                            .then(function (response) {
+                        //merge both JSON responses for the current summoner into one summoner object
+                        let summoner = new User;
+                        let key;
 
-                                for (let i = 0; i < response.data.length; i++) {
-                                    if (response.data[i].queueType == "RANKED_SOLO_5x5") {
-                                        let user = new User({
-                                            summonerName: username,
-                                            summonerID: summonerID,
-                                            puuid: puuid,
-                                            summonerLevel: level,
-                                            tier: response.data[i].tier,
-                                            rank: response.data[i].rank,
-                                            leaguePoints: response.data[i].leaguePoints,
-                                            wins: response.data[i].wins,
-                                            losses: response.data[i].losses,
-                                        });
-                                        user.save(function (err) {
-                                            if (err) console.log(err);
-                                        });
-                                        res.send(user);
-                                        break;
-                                    }
-                                }
-                            })
-                            .catch(function (error) {
-                                console.log("second error: " + error);
-                            });
+                        for (key in summonerDataIDs) {
+                            if(summonerDataIDs._doc.hasOwnProperty(key)){
+                                summoner[key] = summonerDataIDs._doc[key];
+                            }
+                        }
 
-                    })
-                    .catch(function (error) {
-                        console.log("first error: " + error);
+                        for (key in summonerDataRankedSoloDuo) {
+                            if(summonerDataRankedSoloDuo._doc.hasOwnProperty(key)){
+                                summoner[key] = summonerDataRankedSoloDuo._doc[key];
+                            }
+                        }
+
+                        summoner.save(function (err) {
+                            if (err) console.log(err);
+                        });
+
+                        res.send(summoner);
                     });
+                });
+                
             } else {
                 res.send(users);
             }
