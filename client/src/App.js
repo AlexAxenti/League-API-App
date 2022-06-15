@@ -65,18 +65,18 @@ function Summoners() {
   }, [summonerName]);
 
   function updateUser() {
-    axios.get(`/api/user/update/${summoner.summonerID}`)
+    axios.get(`/api/user/update/${summoner.summonerName}`)
       .then(res => {
         console.log(res)
-        if (res.status == 200) {
+        if (res.status === 200) {
           setSummoner(res.data);
         }
       })
       .catch(err => {
         let res = err.response;
-        if (res.status == 429) {
+        if (res.status === 429) {
           console.log(res.data);
-        } else if (res.status == 404) {
+        } else if (res.status === 404) {
           console.log(res.data);
         } else {
           console.log(err)

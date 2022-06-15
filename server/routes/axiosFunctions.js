@@ -1,9 +1,9 @@
 const axios = require('axios').default;
 var User = require('../models/users');
 
-const getSummonerDataIDs = async(username) => {
+const getSummonerDataIDs = async(summonerName) => {
     try {
-        const response = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${username}?api_key=${process.env.RIOT_API_KEY}`);
+        const response = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${process.env.RIOT_API_KEY}`);
 
         //response status 200 == valid response
         if (response.status === 200) {
