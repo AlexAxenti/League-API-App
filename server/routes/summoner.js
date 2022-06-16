@@ -2,7 +2,7 @@ const { default: axios } = require('axios');
 const express = require('express');
 const router = express.Router();
 
-var User = require('../models/users');
+var Summoner = require('../models/summoners');
 const axiosFunctions = require('./axiosFunctions.js');
 
 /* GET home page. */
@@ -19,14 +19,14 @@ router.get('/update/:summonerName', (req, res) => {
     let summonerName = req.params.summonerName;
     let timestamp = new Date();
 
-    var query = User.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') });
-    query.exec(function (err, user) {
+    var query = Summoner.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') });
+    query.exec(function (err, summoner) {
         if (!err) {
-            if (!user) {
+            if (!summoner) {
                 res.status(404);
-                res.send({error: "No user found"})
+                res.send({error: "No summoner found"})
             } else {
-                let timeSinceUpdate = getDifferenceInSeconds(timestamp, user.updatedAt)
+                let timeSinceUpdate = getDifferenceInSeconds(timestamp, summoner.updatedAt)
                 if (timeSinceUpdate < 90) {
                     res.status(429);
                     res.send({error: "Updated too recently", timeSinceUpdate: timeSinceUpdate})
@@ -42,26 +42,26 @@ router.get('/update/:summonerName', (req, res) => {
 
                             //merge both JSON responses for the current summoner into one summoner object
                             let key;
-                            let objectID = user._id;
+                            let objectID = summoner._id;
 
                             for (key in summonerDataIDs) {
                                 if (summonerDataIDs._doc.hasOwnProperty(key)) {
-                                    user[key] = summonerDataIDs._doc[key];
+                                    summoner[key] = summonerDataIDs._doc[key];
                                 }
                             }
 
                             for (key in summonerDataRankedSoloDuo) {
                                 if (summonerDataRankedSoloDuo._doc.hasOwnProperty(key)) {
-                                    user[key] = summonerDataRankedSoloDuo._doc[key];
+                                    summoner[key] = summonerDataRankedSoloDuo._doc[key];
                                 }
                             }
                             
-                            user._id = objectID;
-                            user.save(function (err) {
+                            summoner._id = objectID;
+                            summoner.save(function (err) {
                                 if (err) console.log(err);
                             });
 
-                            res.send(user);
+                            res.send(summoner);
                         });
                     });
                 }
@@ -73,10 +73,10 @@ router.get('/update/:summonerName', (req, res) => {
 router.get('/:summonerName', (req, res) => {
     let summonerName = req.params.summonerName;
 
-    var query = User.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') }).select('-_id');
-    query.exec(function (err, user) {
+    var query = Summoner.findOne({ summonerName: new RegExp(`^${summonerName}$`, 'i') }).select('-_id');
+    query.exec(function (err, summoner) {
         if (!err) {
-            if (!user) {
+            if (!summoner) {
                 // Query from riot
                 const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(summonerName);
                 getSummonerDataIDs.then((responseIDs) => {
@@ -87,31 +87,31 @@ router.get('/:summonerName', (req, res) => {
                         const summonerDataRankedSoloDuo = responseRankedSoloDuo;
 
                         //merge both JSON responses for the current summoner into one summoner object
-                        let summoner = new User;
+                        let newSummoner = new Summoner;
                         let key;
 
                         for (key in summonerDataIDs) {
                             if(summonerDataIDs._doc.hasOwnProperty(key)){
-                                summoner[key] = summonerDataIDs._doc[key];
+                                newSummoner[key] = summonerDataIDs._doc[key];
                             }
                         }
 
                         for (key in summonerDataRankedSoloDuo) {
                             if(summonerDataRankedSoloDuo._doc.hasOwnProperty(key)){
-                                summoner[key] = summonerDataRankedSoloDuo._doc[key];
+                                newSummoner[key] = summonerDataRankedSoloDuo._doc[key];
                             }
                         }
 
-                        summoner.save(function (err) {
+                        newSummoner.save(function (err) {
                             if (err) console.log(err);
                         });
 
-                        res.send(summoner);
+                        res.send(newSummoner);
                     });
                 });
                 
             } else {
-                res.send(user);
+                res.send(summoner);
             }
         } else {
             console.log(err)

@@ -1,6 +1,6 @@
 var mongoose = require('mongoose');
 
-var userSchema = new mongoose.Schema({
+var summonerSchema = new mongoose.Schema({
     summonerName: String,
     summonerID: String,
     puuid: String,
@@ -12,4 +12,4 @@ var userSchema = new mongoose.Schema({
     losses: Number,
 }, { timestamps: true });
 
-module.exports = mongoose.model("User", userSchema)
+module.exports = mongoose.model("Summoner", summonerSchema)
