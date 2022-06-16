@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-router-dom";
+import axios from 'axios';
 import './App.css';
 
 export default function App() {
@@ -54,7 +55,7 @@ function Summoners() {
 
   useEffect(() => {
     if (typeof summonerName != "undefined") {
-      fetch(`/api/user/${summonerName}`)
+      fetch(`/api/summoner/${summonerName}`)
       .then(res => res.json())
       .then(data => {
         setSummoner(data);
@@ -63,18 +64,39 @@ function Summoners() {
     }
   }, [summonerName]);
 
+  function updateSummoner() {
+    axios.get(`/api/summoner/update/${summoner.summonerName}`)
+      .then(res => {
+        console.log(res)
+        if (res.status === 200) {
+          setSummoner(res.data);
+        }
+      })
+      .catch(err => {
+        let res = err.response;
+        if (res.status === 429) {
+          console.log(res.data);
+        } else if (res.status === 404) {
+          console.log(res.data);
+        } else {
+          console.log(err)
+        }
+      })
+  }
+
   return (
     <div className="search-screen">
       <div>
         <h1 id="search-header">Search Summoners</h1>
         <form className="form-inline my-2 my-lg-0">
           <label>Summoner Name: </label>
-          <input className="form-control mr-sm-2" type="text" name="name" placeholder="Search User" onChange={e => setSearch(e.target.value)}/>
+          <input className="form-control mr-sm-2" type="text" name="name" placeholder="Search Summoner" onChange={e => setSearch(e.target.value)}/>
           <Link to={{pathname: `/summoners/${search}`}}>
             <button className="btn btn-outline-success my-2 my-sm-0">Submit</button>
           </Link>
         </form>
         <div className="summoner-info">
+          <button onClick={updateSummoner} className="btn btn-outline-success my-2 my-sm-0">Update</button>
           <p>Summoner: {summoner.summonerName}</p>
           <p>Level: {summoner.summonerLevel}</p>
           <p>Rank: {summoner.tier} {summoner.rank}</p>
