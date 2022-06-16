@@ -34,6 +34,7 @@ export default function App() {
             <Route index element={<Summoners />}></Route>
             <Route path=":summonerName" element={<Summoners />}></Route>
           </Route>
+          <Route path="/captain/teemo/on/duty" element={<Teemo />}></Route>
         </Routes>
       </div>
     </Router>
@@ -113,6 +114,17 @@ function About() {
   return (
     <div>
       <h1>About</h1>
+    </div>
+  )
+}
+
+function Teemo() {
+  return (
+    <div>
+      <img src={require('./assets/TeemoIRL.jpg')} alt="" />
+      <img src={require('./assets/TeemoPepe.jpg')} alt="" />
+      <img src={require('./assets/TeemoMeme.jpg')} alt="" />
+      <img src={require('./assets/TeemoEmote.webp')} alt="" />
     </div>
   )
 }
