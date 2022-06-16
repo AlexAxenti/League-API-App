@@ -1,5 +1,5 @@
 const axios = require('axios').default;
-var User = require('../models/users');
+var Summoner = require('../models/summoners');
 
 const getSummonerDataIDs = async(summonerName) => {
     try {
@@ -7,14 +7,14 @@ const getSummonerDataIDs = async(summonerName) => {
 
         //response status 200 == valid response
         if (response.status === 200) {
-            let user = new User({
+            let summoner = new Summoner({
                 summonerName: response.data.name,
                 summonerID: response.data.id,
                 puuid: response.data.puuid,
                 summonerLevel: response.data.summonerLevel
             });
             
-            return user;
+            return summoner;
         } else {
             return false;
         }
@@ -31,7 +31,7 @@ const getSummonerDataRankedSoloDuo = async(summonerID) => {
         if (response.status === 200) {
             for (let i = 0; i < response.data.length; i++) {
                 if (response.data[i].queueType == "RANKED_SOLO_5x5") {
-                    let user = new User({
+                    let summoner = new Summoner({
                         tier: response.data[i].tier,
                         rank: response.data[i].rank,
                         leaguePoints: response.data[i].leaguePoints,
@@ -39,7 +39,7 @@ const getSummonerDataRankedSoloDuo = async(summonerID) => {
                         losses: response.data[i].losses,
                     });
                     
-                    return user;
+                    return summoner;
                 }
             }    
         } else {
