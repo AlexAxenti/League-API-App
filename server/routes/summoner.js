@@ -5,7 +5,7 @@ const router = express.Router();
 var Summoner = require('../models/summoners');
 const axiosFunctions = require('./axiosFunctions.js');
 
-/* GET home page. */
+/*  /api/summoner   */
 router.get('/', (req, res) => {
     res.send("Hello world!");
 })
@@ -15,7 +15,7 @@ function getDifferenceInSeconds(date1, date2) {
     return diffInMs / 1000;
 }
 
-router.get('/update/:summonerName', (req, res) => {
+router.get('/:summonerName/update', (req, res) => {
     let summonerName = req.params.summonerName;
     let timestamp = new Date();
 

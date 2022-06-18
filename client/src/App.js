@@ -54,10 +54,12 @@ function Home() {
 }
 
 function Summoners() {
-  const [summoner, setSummoner] = useState({});
-  const [search, setSearch] = useState("");
   const { summonerName } = useParams();
 
+  const [summoner, setSummoner] = useState({});
+  const [liveGame, setLiveGame] = useState({});
+  const [search, setSearch] = useState("");
+  
   useEffect(() => {
     if (typeof summonerName != "undefined") {
       fetch(`/api/summoner/${summonerName}`)
@@ -69,8 +71,8 @@ function Summoners() {
     }
   }, [summonerName]);
 
-  function updateSummoner() {
-    axios.get(`/api/summoner/update/${summoner.summonerName}`)
+  const updateSummoner = () => {
+    axios.get(`/api/summoner/${summoner.summonerName}/update`)
       .then(res => {
         console.log(res)
         if (res.status === 200) {
@@ -86,6 +88,17 @@ function Summoners() {
         } else {
           console.log(err)
         }
+      })
+  }
+
+  const getLiveGame = () => {
+    axios.get(`/api/summoner/${summoner.summonerID}/ingame`)
+      .then(res => {
+        console.log(res);
+      })
+      .catch(err => {
+        //let res = err.response;
+        console.log(err);
       })
   }
 
@@ -108,6 +121,25 @@ function Summoners() {
           <p>LP: {summoner.leaguePoints}</p>
           <p>Wins: {summoner.wins}</p>
           <p>Losses: {summoner.losses}</p>
+        </div>
+        <div className="live-game-container">
+          <button onClick={getLiveGame} className="btn btn-outline-success my-2 my-sm-0">Live Game</button>
+          
+          {Object.keys(liveGame).length === 0 ? <div></div> : 
+          <ul>
+            <p>Blue Team</p>
+            <li>{liveGame.bluePlayers[0]}</li>
+            <li>{liveGame.bluePlayers[0]}</li>
+            <li>{liveGame.bluePlayers[0]}</li>
+            <li>{liveGame.bluePlayers[0]}</li>
+            <li>{liveGame.bluePlayers[0]}</li>
+            <p>Red Team</p>
+            <li>{liveGame.redPlayers[0]}</li>
+            <li>{liveGame.redPlayers[0]}</li>
+            <li>{liveGame.redPlayers[0]}</li>
+            <li>{liveGame.redPlayers[0]}</li>
+            <li>{liveGame.redPlayers[0]}</li>
+          </ul>}
         </div>
       </div>
     </div>
