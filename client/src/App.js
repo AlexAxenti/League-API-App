@@ -54,10 +54,12 @@ function Home() {
 }
 
 function Summoners() {
-  const [summoner, setSummoner] = useState({});
-  const [search, setSearch] = useState("");
   const { summonerName } = useParams();
 
+  const [summoner, setSummoner] = useState({});
+  const [liveGame, setLiveGame] = useState({});
+  const [search, setSearch] = useState("");
+  
   useEffect(() => {
     if (typeof summonerName != "undefined") {
       fetch(`/api/summoner/${summonerName}`)
@@ -69,8 +71,8 @@ function Summoners() {
     }
   }, [summonerName]);
 
-  function updateSummoner() {
-    axios.get(`/api/summoner/update/${summoner.summonerName}`)
+  const updateSummoner = () => {
+    axios.get(`/api/summoner/${summoner.summonerName}/update`)
       .then(res => {
         console.log(res)
         if (res.status === 200) {
@@ -89,6 +91,20 @@ function Summoners() {
       })
   }
 
+  const getLiveGame = () => {
+    axios.get(`/api/summoner/${summoner.summonerName}/ingame`)
+      .then(res => {
+        console.log(res);
+        if (res.status === 200) {
+          setLiveGame(res.data);
+        }
+      })
+      .catch(err => {
+        //let res = err.response;
+        console.log(err);
+      })
+  }
+
   return (
     <div className="search-screen">
       <div>
@@ -100,6 +116,17 @@ function Summoners() {
             <button className="btn btn-outline-success my-2 my-sm-0">Submit</button>
           </Link>
         </form>
+        {Object.keys(summoner).length === 0 
+        ? 
+        <div className="summoner-info">
+          <p>Summoner: </p>
+          <p>Level: </p>
+          <p>Rank: </p>
+          <p>LP: </p>
+          <p>Wins: </p>
+          <p>Losses: </p>
+        </div> 
+        : 
         <div className="summoner-info">
           <button onClick={updateSummoner} className="btn btn-outline-success my-2 my-sm-0">Update</button>
           <p>Summoner: {summoner.summonerName}</p>
@@ -108,6 +135,33 @@ function Summoners() {
           <p>LP: {summoner.leaguePoints}</p>
           <p>Wins: {summoner.wins}</p>
           <p>Losses: {summoner.losses}</p>
+        </div>
+        }   
+        <div className="live-game-container">
+          <button onClick={getLiveGame} className="btn btn-outline-success my-2 my-sm-0">Live Game</button>
+          
+          {Object.keys(liveGame).length === 0 ? <div></div> : 
+          <ul>
+            <p>Blue Team</p>
+            {liveGame.bluePlayers.map((item, index) => {
+              return (
+                <li>
+                  <a href={`/summoners/${item.summonerName}`} target="_blank" rel="noopener noreferrer">{item.summonerName}</a> {item.championId}
+                </li>
+              )
+            })}
+
+            <br></br>
+            
+            <p>Red Team</p>
+            {liveGame.redPlayers.map((item, index) => {
+              return (
+                <li>
+                  <a href={`/summoners/${item.summonerName}`} target="_blank" rel="noopener noreferrer">{item.summonerName}</a> {item.championId}
+                </li>
+              )
+            })}
+          </ul>}
         </div>
       </div>
     </div>
@@ -118,6 +172,7 @@ function About() {
   return (
     <div>
       <h1>About</h1>
+      <h3>Created by Palagino and Zethyos</h3>
     </div>
   )
 }
