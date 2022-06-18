@@ -92,9 +92,12 @@ function Summoners() {
   }
 
   const getLiveGame = () => {
-    axios.get(`/api/summoner/${summoner.summonerID}/ingame`)
+    axios.get(`/api/summoner/${summoner.summonerName}/ingame`)
       .then(res => {
         console.log(res);
+        if (res.status === 200) {
+          setLiveGame(res.data);
+        }
       })
       .catch(err => {
         //let res = err.response;
@@ -128,17 +131,17 @@ function Summoners() {
           {Object.keys(liveGame).length === 0 ? <div></div> : 
           <ul>
             <p>Blue Team</p>
-            <li>{liveGame.bluePlayers[0]}</li>
-            <li>{liveGame.bluePlayers[0]}</li>
-            <li>{liveGame.bluePlayers[0]}</li>
-            <li>{liveGame.bluePlayers[0]}</li>
-            <li>{liveGame.bluePlayers[0]}</li>
+            <li>{liveGame.bluePlayers[0].summonerName} {liveGame.bluePlayers[0].championID}</li>
+            <li>{liveGame.bluePlayers[1].summonerName} {liveGame.bluePlayers[1].championID}</li>
+            <li>{liveGame.bluePlayers[2].summonerName} {liveGame.bluePlayers[2].championID}</li>
+            <li>{liveGame.bluePlayers[3].summonerName} {liveGame.bluePlayers[3].championID}</li>
+            <li>{liveGame.bluePlayers[4].summonerName} {liveGame.bluePlayers[4].championID}</li>
             <p>Red Team</p>
-            <li>{liveGame.redPlayers[0]}</li>
-            <li>{liveGame.redPlayers[0]}</li>
-            <li>{liveGame.redPlayers[0]}</li>
-            <li>{liveGame.redPlayers[0]}</li>
-            <li>{liveGame.redPlayers[0]}</li>
+            <li>{liveGame.redPlayers[0].summonerName} {liveGame.redPlayers[0].championID}</li>
+            <li>{liveGame.redPlayers[1].summonerName} {liveGame.redPlayers[1].championID}</li>
+            <li>{liveGame.redPlayers[2].summonerName} {liveGame.redPlayers[2].championID}</li>
+            <li>{liveGame.redPlayers[3].summonerName} {liveGame.redPlayers[3].championID}</li>
+            <li>{liveGame.redPlayers[4].summonerName} {liveGame.redPlayers[4].championID}</li>
           </ul>}
         </div>
       </div>
