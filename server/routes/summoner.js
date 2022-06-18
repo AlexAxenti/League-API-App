@@ -117,6 +117,16 @@ router.get('/:summonerName', (req, res) => {
             console.log(err)
         }
     });
-})
+});
+
+router.get('/:summonerID/ingame', (req, res) => {
+    let summonerID = req.params.summonerID;
+
+    const getLiveData = axiosFunctions.getLiveGameData(summonerID);
+
+    getLiveData.then((response) => {
+        console.log(response);
+    });
+});
 
 module.exports = router;
