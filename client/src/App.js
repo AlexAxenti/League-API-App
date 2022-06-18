@@ -1,5 +1,9 @@
 import React, {useState, useEffect} from "react";
 import { BrowserRouter as Router, Route, Routes, Link, useParams } from "react-router-dom";
+import meme from './assets/TeemoMeme.jpg';
+import pepe from './assets/TeemoPepe.jpg';
+import irl from './assets/TeemoIRL.jpg';
+import emote from './assets/TeemoEmote.webp';
 import axios from 'axios';
 import './App.css';
 
@@ -121,10 +125,10 @@ function About() {
 function Teemo() {
   return (
     <div>
-      <img src={require('./assets/TeemoIRL.jpg')} alt="" />
-      <img src={require('./assets/TeemoPepe.jpg')} alt="" />
-      <img src={require('./assets/TeemoMeme.jpg')} alt="" />
-      <img src={require('./assets/TeemoEmote.webp')} alt="" />
+      <img src={irl} alt="" />
+      <img src={pepe} alt="" />
+      <img src={meme} alt="" />
+      <img src={emote} alt="" />
     </div>
   )
 }
