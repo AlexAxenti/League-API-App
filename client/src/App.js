@@ -61,6 +61,9 @@ function Summoners() {
   const [search, setSearch] = useState("");
   
   useEffect(() => {
+    setSummoner({});
+    setLiveGame({});
+    setSearch("");
     if (typeof summonerName != "undefined") {
       fetch(`/api/summoner/${summonerName}`)
       .then(res => res.json())
