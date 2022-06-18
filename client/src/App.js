@@ -118,6 +118,7 @@ function About() {
   return (
     <div>
       <h1>About</h1>
+      <h3>Created by Palagino and Zethyos</h3>
     </div>
   )
 }
