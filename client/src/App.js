@@ -131,17 +131,24 @@ function Summoners() {
           {Object.keys(liveGame).length === 0 ? <div></div> : 
           <ul>
             <p>Blue Team</p>
-            <li>{liveGame.bluePlayers[0].summonerName} {liveGame.bluePlayers[0].championID}</li>
-            <li>{liveGame.bluePlayers[1].summonerName} {liveGame.bluePlayers[1].championID}</li>
-            <li>{liveGame.bluePlayers[2].summonerName} {liveGame.bluePlayers[2].championID}</li>
-            <li>{liveGame.bluePlayers[3].summonerName} {liveGame.bluePlayers[3].championID}</li>
-            <li>{liveGame.bluePlayers[4].summonerName} {liveGame.bluePlayers[4].championID}</li>
+            {liveGame.bluePlayers.map((item, index) => {
+              return (
+                <li>
+                  <a href={`/summoners/${item.summonerName}`} target="_blank">{item.summonerName}</a> {item.championId}
+                </li>
+              )
+            })}
+
+            <br></br>
+            
             <p>Red Team</p>
-            <li>{liveGame.redPlayers[0].summonerName} {liveGame.redPlayers[0].championID}</li>
-            <li>{liveGame.redPlayers[1].summonerName} {liveGame.redPlayers[1].championID}</li>
-            <li>{liveGame.redPlayers[2].summonerName} {liveGame.redPlayers[2].championID}</li>
-            <li>{liveGame.redPlayers[3].summonerName} {liveGame.redPlayers[3].championID}</li>
-            <li>{liveGame.redPlayers[4].summonerName} {liveGame.redPlayers[4].championID}</li>
+            {liveGame.redPlayers.map((item, index) => {
+              return (
+                <li>
+                  <a href={`/summoners/${item.summonerName}`} target="_blank">{item.summonerName}</a> {item.championId}
+                </li>
+              )
+            })}
           </ul>}
         </div>
       </div>

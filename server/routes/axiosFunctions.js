@@ -65,9 +65,11 @@ const getLiveGameData = async(summonerID) => {
 
             for(let i = 0; i < response.data.participants.length; i++) {
                 if(response.data.participants[i].teamId == blueSideCode) {
+                    liveGame.bluePlayers[i] = {};
                     liveGame.bluePlayers[i].summonerName = response.data.participants[i].summonerName;
                     liveGame.bluePlayers[i].championId = response.data.participants[i].championId
                 } else {
+                    liveGame.redPlayers[i % 5] = {};
                     liveGame.redPlayers[i % 5].summonerName = response.data.participants[i].summonerName;
                     liveGame.redPlayers[i % 5].championId = response.data.participants[i].championId
                 }
