@@ -116,6 +116,17 @@ function Summoners() {
             <button className="btn btn-outline-success my-2 my-sm-0">Submit</button>
           </Link>
         </form>
+        {Object.keys(summoner).length === 0 
+        ? 
+        <div className="summoner-info">
+          <p>Summoner: </p>
+          <p>Level: </p>
+          <p>Rank: </p>
+          <p>LP: </p>
+          <p>Wins: </p>
+          <p>Losses: </p>
+        </div> 
+        : 
         <div className="summoner-info">
           <button onClick={updateSummoner} className="btn btn-outline-success my-2 my-sm-0">Update</button>
           <p>Summoner: {summoner.summonerName}</p>
@@ -125,6 +136,7 @@ function Summoners() {
           <p>Wins: {summoner.wins}</p>
           <p>Losses: {summoner.losses}</p>
         </div>
+        }   
         <div className="live-game-container">
           <button onClick={getLiveGame} className="btn btn-outline-success my-2 my-sm-0">Live Game</button>
           
@@ -134,7 +146,7 @@ function Summoners() {
             {liveGame.bluePlayers.map((item, index) => {
               return (
                 <li>
-                  <a href={`/summoners/${item.summonerName}`} target="_blank">{item.summonerName}</a> {item.championId}
+                  <a href={`/summoners/${item.summonerName}`} target="_blank" rel="noopener noreferrer">{item.summonerName}</a> {item.championId}
                 </li>
               )
             })}
@@ -145,7 +157,7 @@ function Summoners() {
             {liveGame.redPlayers.map((item, index) => {
               return (
                 <li>
-                  <a href={`/summoners/${item.summonerName}`} target="_blank">{item.summonerName}</a> {item.championId}
+                  <a href={`/summoners/${item.summonerName}`} target="_blank" rel="noopener noreferrer">{item.summonerName}</a> {item.championId}
                 </li>
               )
             })}
