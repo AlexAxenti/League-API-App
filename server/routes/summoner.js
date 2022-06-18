@@ -5,7 +5,7 @@ const router = express.Router();
 var Summoner = require('../models/summoners');
 const axiosFunctions = require('./axiosFunctions.js');
 
-/* GET home page. */
+/*  /api/summoner   */
 router.get('/', (req, res) => {
     res.send("Hello world!");
 })
@@ -15,7 +15,7 @@ function getDifferenceInSeconds(date1, date2) {
     return diffInMs / 1000;
 }
 
-router.get('/update/:summonerName', (req, res) => {
+router.get('/:summonerName/update', (req, res) => {
     let summonerName = req.params.summonerName;
     let timestamp = new Date();
 
@@ -117,6 +117,26 @@ router.get('/:summonerName', (req, res) => {
             console.log(err)
         }
     });
-})
+});
+
+router.get('/:summonerName/ingame', (req, res) => {
+    let summonerName = req.params.summonerName;
+
+    const getSummonerDataIDs = axiosFunctions.getSummonerDataIDs(summonerName);
+    getSummonerDataIDs.then((responseIDs) => {
+        const summonerDataIDs = responseIDs;
+
+        const getLiveData = axiosFunctions.getLiveGameData(summonerDataIDs.summonerID);
+        getLiveData.then((response) => {
+            res.send(response);
+        })
+        .catch((error) => {
+            console.log(error);
+            res.status(500);
+        })
+    })
+
+    
+});
 
 module.exports = router;

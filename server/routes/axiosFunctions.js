@@ -51,7 +51,42 @@ const getSummonerDataRankedSoloDuo = async(summonerID) => {
     }
 }
 
+const getLiveGameData = async(summonerID) => {
+    try {
+        const response = await axios.get(`https://na1.api.riotgames.com/lol/spectator/v4/active-games/by-summoner/${summonerID}?api_key=${process.env.RIOT_API_KEY}`);
+    
+        if (response.status === 200) {
+            let liveGame = {
+                bluePlayers: [],
+                redPlayers: []
+            };
+
+            blueSideCode = "100"; //if teamId == "100" this player is blue side
+
+            for(let i = 0; i < response.data.participants.length; i++) {
+                if(response.data.participants[i].teamId == blueSideCode) {
+                    liveGame.bluePlayers[i] = {};
+                    liveGame.bluePlayers[i].summonerName = response.data.participants[i].summonerName;
+                    liveGame.bluePlayers[i].championId = response.data.participants[i].championId
+                } else {
+                    liveGame.redPlayers[i % 5] = {};
+                    liveGame.redPlayers[i % 5].summonerName = response.data.participants[i].summonerName;
+                    liveGame.redPlayers[i % 5].championId = response.data.participants[i].championId
+                }
+            }
+            
+            return liveGame;   
+        } else {
+            return false;
+        }    
+    } catch(error) {
+        console.log("getLiveGameData error: " + error);
+        return false;
+    }
+}
+
 module.exports = {
     getSummonerDataIDs,
-    getSummonerDataRankedSoloDuo
+    getSummonerDataRankedSoloDuo,
+    getLiveGameData
 }
