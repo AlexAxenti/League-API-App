@@ -5,7 +5,7 @@ class apiLimit{
         this.secondTimer = Date.now();
         this.minuteTimer = Date.now();
 
-        this.secondRequestLimit = 19;
+        this.secondRequestLimit = 18;
         this.secondTimeLimit = 1000;
 
         this.minuteRequestLimit = 95;
