@@ -64,12 +64,21 @@ function Summoners() {
     setSummoner({});
     setLiveGame({});
     if (typeof summonerName != "undefined") {
-      fetch(`/api/summoner/${summonerName}`)
-      .then(res => res.json())
-      .then(data => {
-        setSummoner(data);
-        console.log(data);
-      });
+      axios.get(`/api/summoner/${summonerName}`)
+        .then(res => {
+          setSummoner(res.data);
+        })
+        .catch(err => {
+          let res = err.response;
+          if (res.status === 503) {
+            alert("Server receiving too many requests, try again later.")
+          } else if (res.status === 404) {
+            alert("User does not exist");
+          } else {
+            console.log(err);
+          }
+          console.log(res);
+        })
     }
   }, [summonerName]);
 
@@ -84,12 +93,16 @@ function Summoners() {
       .catch(err => {
         let res = err.response;
         if (res.status === 429) {
-          console.log(res.data);
+          let timeUntilAvailable = 90 - res.data.timeSinceUpdate;
+          alert("Updated too recently, available in " + timeUntilAvailable + " seconds.");
         } else if (res.status === 404) {
-          console.log(res.data);
+          alert("Summoner not found.");
+        } else if (res.status === 503) {
+          alert("Server receiving too many requests, try again later.")
         } else {
           console.log(err)
         }
+        console.log(res);
       })
   }
 
@@ -102,8 +115,15 @@ function Summoners() {
         }
       })
       .catch(err => {
-        //let res = err.response;
-        console.log(err);
+        let res = err.response;
+        if (res.status === 503) {
+          alert("Server receiving too many requests, try again later.")
+        } else if (res.status === 404) {
+          alert("User is currently not ingame");
+        } else {
+          console.log(err);
+        }
+        console.log(res);
       })
   }
 
