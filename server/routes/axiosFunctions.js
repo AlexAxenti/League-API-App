@@ -1,6 +1,9 @@
 const axios = require('axios').default;
 var Summoner = require('../models/summoners');
 
+var apiLimit = require('./apiLimit');
+let limit = apiLimit.apiLimit;
+
 const getSummonerDataIDs = async(summonerName) => {
     try {
         const response = await axios.get(`https://na1.api.riotgames.com/lol/summoner/v4/summoners/by-name/${summonerName}?api_key=${process.env.RIOT_API_KEY}`);
