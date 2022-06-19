@@ -3,7 +3,7 @@ const express = require('express');
 const router = express.Router();
 
 var Summoner = require('../models/summoners');
-const axiosFunctions = require('./axiosFunctions.js');
+const axiosFunctions = require('../utils/axiosFunctions.js');
 
 /*  /api/summoner   */
 router.get('/', (req, res) => {
@@ -62,10 +62,34 @@ router.get('/:summonerName/update', (req, res) => {
                             });
 
                             res.send(summoner);
+                        })
+                        .catch((error) => {
+                            if (error.message === '503') {
+                                res.status(503);
+                            } else if (error.message === '404') {
+                                res.status(404);
+                            } else {
+                                res.status(500);
+                            }
+                            res.send();
+                            console.log(error.message);
                         });
+                    })
+                    .catch((error) => {
+                        if (error.message === '503') {
+                            res.status(503);
+                        } else if (error.message === '404') {
+                            res.status(404);
+                        } else {
+                            res.status(500);
+                        }
+                        res.send();
+                        console.log(error.message);
                     });
                 }
             }
+        } else {
+            console.log(err);
         }
     })
 });
@@ -107,9 +131,30 @@ router.get('/:summonerName', (req, res) => {
                         });
 
                         res.send(newSummoner);
+                    })
+                    .catch((error) => {
+                        if (error.message === '503') {
+                            res.status(503);
+                        } else if (error.message === '404') {
+                            res.status(404);
+                        } else {
+                            res.status(500);
+                        }
+                        res.send();
+                        console.log(error.message);
                     });
+                })
+                .catch((error) => {
+                    if (error.message === '503') {
+                        res.status(503);
+                    } else if (error.message === '404') {
+                        res.status(404);
+                    } else {
+                        res.status(500);
+                    }
+                    res.send();
+                    console.log(error.message);
                 });
-                
             } else {
                 res.send(summoner);
             }
@@ -131,12 +176,28 @@ router.get('/:summonerName/ingame', (req, res) => {
             res.send(response);
         })
         .catch((error) => {
-            console.log(error);
-            res.status(500);
+            if(error.message === '503') {
+                res.status(503);
+            } else if (error.message === '404') {
+                res.status(404);
+            } else {
+                res.status(500);
+            }
+            res.send();
+            console.log(error.message);
         })
     })
-
-    
+    .catch((error) => {
+        if (error.message === '503') {
+            res.status(503);
+        } else if (error.message === '404') {
+            res.status(404);
+        } else {
+            res.status(500);
+        }
+        res.send();
+        console.log(error.message);
+    });
 });
 
 module.exports = router;
