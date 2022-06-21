@@ -1,4 +1,3 @@
-const { default: axios } = require('axios');
 const express = require('express');
 
 var Summoner = require('../models/summoners');
