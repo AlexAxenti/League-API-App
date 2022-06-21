@@ -56,3 +56,17 @@ ul {
 #search-header {
   text-align: center;
 }
+
+.progress-bar {
+  border-radius: 0px;
+}
+
+.progress {
+  display: none;
+}
+
+.progress-background {
+  background-color: white;
+  height: 1rem;
+  width: 100%;
+}

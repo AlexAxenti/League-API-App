@@ -30,7 +30,10 @@ export default function App() {
             </Link>
           </form>
         </nav>
-
+        <div className="progress">
+          <div className="progress-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <div className="progress-background"></div>
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/about" element={<About />}></Route>
@@ -53,6 +56,30 @@ function Home() {
   );
 }
 
+function startLoader(current, max) {
+  var bar = document.querySelector(".progress-bar");
+  document.querySelector(".progress-background").style.display = "none";
+  document.querySelector(".progress").style.display = "flex";
+  setTimeout(() => increaseLoader(bar, current, max), 100);
+}
+
+function increaseLoader(bar, value, max) {
+  bar.style.width = value + "%";
+  console.log(value);
+  if (value + 10 <= max) {
+    console.log("ways?");
+    setTimeout(() => increaseLoader(bar, value + 10, max), 75);
+  }
+  if (value == 100) {
+    setTimeout(() => {
+      document.querySelector(".progress").style.display = "none";
+      document.querySelector(".progress-background").style.display = "block";
+      bar.style.width = 0 + "%";
+    }, 1000);
+    
+  }
+}
+
 function Summoners() {
   const { summonerName } = useParams();
 
@@ -64,9 +91,11 @@ function Summoners() {
     setSummoner({});
     setLiveGame({});
     if (typeof summonerName != "undefined") {
+      startLoader(0, 50);
       axios.get(`/api/summoner/${summonerName}`)
         .then(res => {
           setSummoner(res.data);
+          startLoader(50, 100);
         })
         .catch(err => {
           let res = err.response;
@@ -78,17 +107,20 @@ function Summoners() {
             console.log(err);
           }
           console.log(res);
+          startLoader(50, 100);
         })
     }
   }, [summonerName]);
 
   const updateSummoner = () => {
+    startLoader(0, 50);
     axios.get(`/api/summoner/${summoner.summonerName}/update`)
       .then(res => {
         console.log(res)
         if (res.status === 200) {
           setSummoner(res.data);
         }
+        startLoader(50, 100);
       })
       .catch(err => {
         let res = err.response;
@@ -103,16 +135,19 @@ function Summoners() {
           console.log(err)
         }
         console.log(res);
+        startLoader(50, 100);
       })
   }
 
   const getLiveGame = () => {
+    startLoader(0, 50);
     axios.get(`/api/summoner/${summoner.summonerName}/ingame`)
       .then(res => {
         console.log(res);
         if (res.status === 200) {
           setLiveGame(res.data);
         }
+        startLoader(50, 100);
       })
       .catch(err => {
         let res = err.response;
@@ -124,6 +159,7 @@ function Summoners() {
           console.log(err);
         }
         console.log(res);
+        startLoader(50, 100);
       })
   }
 
